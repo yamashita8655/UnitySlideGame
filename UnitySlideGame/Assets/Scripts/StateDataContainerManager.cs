@@ -9,5 +9,8 @@ public class StateDataContainerManager : SimpleMonoBehaviourSingleton<StateDataC
 	public GameObject StartObject { get; set; }
 	
 	public GameObject EndObject { get; set; }
+	
+	// なぞって当たることで獲得できるオブジェクトのリスト
+	public List<GameObject> PostObjectList { get; set; }
 
 }

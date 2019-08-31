@@ -67,6 +67,9 @@ public class LineDrawer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 	}
 
 	public void OnDrag(PointerEventData eventData) {
+		if (FindFreeLineObject() == null) {
+			return;
+		}
         float width = Screen.width;
         float height = Screen.height;
         float widthOffset = width / 2;
