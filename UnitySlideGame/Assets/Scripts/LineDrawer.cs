@@ -17,11 +17,14 @@ public class LineDrawer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
     private List<Vector2> MovePositionList = new List<Vector2>();
 
-    public void Initialize(GameObject lineObjectRaw, GameObject root) {
+    private Vector2 CanvasScalerReferenceResolution = new Vector2();
+
+    public void Initialize(GameObject lineObjectRaw, GameObject root, Vector2 referenceResolution) {
 		LineObject = lineObjectRaw;
 		LineObjectRoot = root;
+        CanvasScalerReferenceResolution = referenceResolution;
 
-		ClearLineObject();
+        ClearLineObject();
 
 		for (int i = 0; i < LineObjectCount; i++) {
 			GameObject obj = Instantiate(lineObjectRaw) as GameObject;
@@ -56,9 +59,28 @@ public class LineDrawer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 
         float width = Screen.width;
         float height = Screen.height;
+        float heightNormalize = height / width;
+
+        float resoWidth = CanvasScalerReferenceResolution.x;
+        float resoHeight = CanvasScalerReferenceResolution.y;
+        float resoHeightNormalize = resoHeight / resoWidth;
+
+        float heightNormalizeRatio = heightNormalize / resoHeightNormalize;
+
+        float widthRatio = CanvasScalerReferenceResolution.x / width;
+        float heightRatio = CanvasScalerReferenceResolution.y / height;
+
         float widthOffset = width / 2;
         float heightOffset = height / 2;
-        Vector3 offsetMousePosition = new Vector3(Input.mousePosition.x - widthOffset, Input.mousePosition.y - heightOffset, 0);
+
+        Debug.Log("width:" + width);
+        Debug.Log("height:" + height);
+        Debug.Log("mousex:" + Input.mousePosition.x);
+        Debug.Log("mousey:" + Input.mousePosition.y);
+        Debug.Log("positionx:" + eventData.position.x);
+        Debug.Log("positiony:" + eventData.position.y);
+
+        Vector3 offsetMousePosition = new Vector3((Input.mousePosition.x - widthOffset)*widthRatio, ((Input.mousePosition.y - heightOffset)*heightRatio)*heightNormalizeRatio, 0);
         LinePositionList.Add(offsetMousePosition);
 
         MovePositionList.Add(offsetMousePosition);
@@ -72,13 +94,33 @@ public class LineDrawer : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDr
 		}
         float width = Screen.width;
         float height = Screen.height;
+        float heightNormalize = height / width;
+
+        float resoWidth = CanvasScalerReferenceResolution.x;
+        float resoHeight = CanvasScalerReferenceResolution.y;
+        float resoHeightNormalize = resoHeight / resoWidth;
+
+        float heightNormalizeRatio = heightNormalize / resoHeightNormalize;
+
+        float widthRatio = CanvasScalerReferenceResolution.x / width;
+        float heightRatio = CanvasScalerReferenceResolution.y / height;
+
         float widthOffset = width / 2;
         float heightOffset = height / 2;
+
+        Debug.Log("width:" + width);
+        Debug.Log("height:" + height);
+        Debug.Log("mousex:" + Input.mousePosition.x);
+        Debug.Log("mousey:" + Input.mousePosition.y);
+        Debug.Log("positionx:" + eventData.position.x);
+        Debug.Log("positiony:" + eventData.position.y);
+
         Vector2 last = LinePositionList[LinePositionList.Count - 1];
         Vector3 prevLast = new Vector3(last.x, last.y);
 
-        Vector3 offsetMousePosition = new Vector3(Input.mousePosition.x - widthOffset, Input.mousePosition.y - heightOffset, 0);
-		InterporationLine(prevLast, offsetMousePosition, true);
+        //Vector3 offsetMousePosition = new Vector3(Input.mousePosition.x - widthOffset, Input.mousePosition.y - heightOffset, 0);
+        Vector3 offsetMousePosition = new Vector3((Input.mousePosition.x - widthOffset) * widthRatio, ((Input.mousePosition.y - heightOffset) * heightRatio) * heightNormalizeRatio, 0);
+        InterporationLine(prevLast, offsetMousePosition, true);
 		DrawLine();
 		LinePositionList.Clear();
 		LinePositionList.Add(offsetMousePosition);

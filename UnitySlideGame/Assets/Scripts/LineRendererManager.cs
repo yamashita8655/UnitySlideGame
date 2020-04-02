@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LineRendererManager : BestPracticeSingleton<LineRendererManager> {
 
@@ -13,8 +14,11 @@ public class LineRendererManager : BestPracticeSingleton<LineRendererManager> {
 	[SerializeField]
 	private GameObject LineObjectRoot;
 
-	public void Initialize() {
-		LineDrawer.Initialize(LineObject, LineObjectRoot);
+    [SerializeField]
+    private CanvasScaler CuCanvasScaler;
+
+    public void Initialize() {
+		LineDrawer.Initialize(LineObject, LineObjectRoot, CuCanvasScaler.referenceResolution);
 	}
 	
 	// Update is called once per frame
